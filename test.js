@@ -1,5 +1,7 @@
 console.log('test')
 
+var Pouch = require('pouchdb')
+
 
 var User = function(name){
   this.name = name
