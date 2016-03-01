@@ -39,10 +39,6 @@ describe('PouchDb', function(){
 
 
   it('should accept documents', function(){
-    var doc = db.get(JSONDate).then(function(result){
-      console.log('result', result)
-      return result
-    });
-    assert.equal(doc, JSONDate)
+    db.get(JSONDate).then(assert.equal(undefined, JSONDate))
   });
 });

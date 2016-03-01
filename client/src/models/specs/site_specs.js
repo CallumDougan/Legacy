@@ -13,11 +13,18 @@ describe('Site', function(){
     testTrench.generateID();
   });
 
+  // Basic properties
+
+
   it('should exist', function(){
     assert.isOk(testSite);
   });
 
+  it('should have an ID', function(){
+    assert.equal('Test Site 55-40', testSite.id);
+  });
+
   it('should increment trenchCounter on trench assignment', function(){
-    assert.equal(testSite.trenchCounter, 1)
-  })
+    assert.equal(testSite.trenchCounter, 1);
+  });
 })

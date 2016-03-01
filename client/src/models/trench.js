@@ -9,6 +9,10 @@ this.id = undefined;
 this.generateID = function(){
   this.site.trenchCounter += 1;
   this.id = this.site.id + ':' + this.site.trenchCounter;
+};
+
+this.addContext = function(context){
+this.contexts.push(context);
 }
 };
 
