@@ -47,7 +47,7 @@
 	'use strict';
 
 	window.onload = function () {
-
+	  console.log('app loaded');
 	  var React = __webpack_require__(1);
 	  var ReactDOM = __webpack_require__(158);
 	  var TrenchBox = __webpack_require__(159);
@@ -59,8 +59,28 @@
 	    'use strict';
 
 	    var ENTER_KEY = 13;
-	    var db = new PouchDB('sites');
-	    var remoteCouch = 'http://localhost:5984/sites';
+	    var db = new PouchDB('siterecord');
+	    var remoteCouch = 'http://localhost:5984/siterecord';
+
+	    var date = new Date();
+	    var JSONDate = date.toJSON();
+
+	    db.put({
+	      "_id": JSONDate,
+	      "title": 'testDoc'
+	    }).then(function (response) {
+	      console.log(response);
+	      done();
+	    }).catch(function (err) {
+	      console.log(err);
+	      done();
+	    });
+
+	    var dbTest = [];
+	    db.allDocs({ include_docs: true, descending: true }, function (err, doc) {
+	      dbTest.push(doc.rows);
+	      console.log(doc);
+	    });
 
 	    // db.changes({
 	    //   since: 'now',
@@ -19803,6 +19823,12 @@
 /***/ function(module, exports) {
 
 	"use strict";
+
+	var Find = function Find() {
+	  this.id = undefined;
+	};
+
+	module.exports = Find;
 
 /***/ },
 /* 165 */
