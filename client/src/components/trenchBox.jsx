@@ -6,7 +6,7 @@ var TrenchBox = React.createClass({
   render: function(){
     return(
       <div>
-      <h1>TrenchBox</h1>
+      <h2>TrenchBox</h2>
       </div>
       )
   }
