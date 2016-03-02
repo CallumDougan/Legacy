@@ -52,10 +52,9 @@
 	  var ReactDOM = __webpack_require__(158);
 	  var TrenchBox = __webpack_require__(159);
 
-	  ReactDOM.render(React.createElement(TrenchBox, null), document.getElementById('legacyapp'));
 	  (function () {
 
-	    var PouchDB = __webpack_require__(161);
+	    var PouchDB = __webpack_require__(165);
 
 	    'use strict';
 
@@ -68,6 +67,8 @@
 	    //   live: true
 	    // }).on('change', showSites);
 	  })();
+
+	  ReactDOM.render(React.createElement(TrenchBox, null), document.getElementById('legacyapp'));
 	};
 
 /***/ },
@@ -19680,6 +19681,7 @@
 	var React = __webpack_require__(1);
 
 	var Trench = __webpack_require__(160);
+	var ContextBox = __webpack_require__(161);
 
 	var TrenchBox = React.createClass({
 	  displayName: 'TrenchBox',
@@ -19692,7 +19694,8 @@
 	        'h2',
 	        null,
 	        'TrenchBox'
-	      )
+	      ),
+	      React.createElement(ContextBox, null)
 	    );
 	  }
 	});
@@ -19729,23 +19732,99 @@
 /* 161 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
+	var React = __webpack_require__(1);
+
+	var Context = __webpack_require__(162);
+	var FindBox = __webpack_require__(163);
+
+	var ContextBox = React.createClass({
+	  displayName: 'ContextBox',
+
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'h3',
+	        null,
+	        'ContextBox'
+	      ),
+	      React.createElement(FindBox, null)
+	    );
+	  }
+	});
+
+	module.exports = ContextBox;
+
+/***/ },
+/* 162 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	var Context = function Context() {};
+
+	module.exports = Context;
+
+/***/ },
+/* 163 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(1);
+
+	var Find = __webpack_require__(164);
+
+	var FindBox = React.createClass({
+	  displayName: 'FindBox',
+
+
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'h4',
+	        null,
+	        'FindBox'
+	      )
+	    );
+	  }
+
+	});
+
+	module.exports = FindBox;
+
+/***/ },
+/* 164 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+/***/ },
+/* 165 */
+/***/ function(module, exports, __webpack_require__) {
+
 	/* WEBPACK VAR INJECTION */(function(process, global) {'use strict';
 
 	function _interopDefault (ex) { return 'default' in ex ? ex['default'] : ex; }
 
-	var jsExtend = __webpack_require__(162);
+	var jsExtend = __webpack_require__(166);
 	var jsExtend__default = _interopDefault(jsExtend);
-	var inherits = _interopDefault(__webpack_require__(163));
-	var collections = _interopDefault(__webpack_require__(164));
-	var events = __webpack_require__(165);
-	var getArguments = _interopDefault(__webpack_require__(166));
-	var debug = _interopDefault(__webpack_require__(167));
-	var pouchCollate = __webpack_require__(170);
+	var inherits = _interopDefault(__webpack_require__(167));
+	var collections = _interopDefault(__webpack_require__(168));
+	var events = __webpack_require__(169);
+	var getArguments = _interopDefault(__webpack_require__(170));
+	var debug = _interopDefault(__webpack_require__(171));
+	var pouchCollate = __webpack_require__(174);
 	var pouchCollate__default = _interopDefault(pouchCollate);
-	var lie = _interopDefault(__webpack_require__(172));
-	var scopedEval = _interopDefault(__webpack_require__(174));
-	var Md5 = _interopDefault(__webpack_require__(175));
-	var vuvuzela = _interopDefault(__webpack_require__(176));
+	var lie = _interopDefault(__webpack_require__(176));
+	var scopedEval = _interopDefault(__webpack_require__(178));
+	var Md5 = _interopDefault(__webpack_require__(179));
+	var vuvuzela = _interopDefault(__webpack_require__(180));
 
 	/* istanbul ignore next */
 	var PouchPromise = typeof Promise === 'function' ? Promise : lie;
@@ -30115,7 +30194,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), (function() { return this; }())))
 
 /***/ },
-/* 162 */
+/* 166 */
 /***/ function(module, exports, __webpack_require__) {
 
 	(function(factory) {
@@ -30154,7 +30233,7 @@
 
 
 /***/ },
-/* 163 */
+/* 167 */
 /***/ function(module, exports) {
 
 	if (typeof Object.create === 'function') {
@@ -30183,7 +30262,7 @@
 
 
 /***/ },
-/* 164 */
+/* 168 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -30258,7 +30337,7 @@
 
 
 /***/ },
-/* 165 */
+/* 169 */
 /***/ function(module, exports) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -30562,7 +30641,7 @@
 
 
 /***/ },
-/* 166 */
+/* 170 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -30586,7 +30665,7 @@
 	}
 
 /***/ },
-/* 167 */
+/* 171 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -30596,7 +30675,7 @@
 	 * Expose `debug()` as the module.
 	 */
 
-	exports = module.exports = __webpack_require__(168);
+	exports = module.exports = __webpack_require__(172);
 	exports.log = log;
 	exports.formatArgs = formatArgs;
 	exports.save = save;
@@ -30760,7 +30839,7 @@
 
 
 /***/ },
-/* 168 */
+/* 172 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -30776,7 +30855,7 @@
 	exports.disable = disable;
 	exports.enable = enable;
 	exports.enabled = enabled;
-	exports.humanize = __webpack_require__(169);
+	exports.humanize = __webpack_require__(173);
 
 	/**
 	 * The currently active debug mode names, and names to skip.
@@ -30963,7 +31042,7 @@
 
 
 /***/ },
-/* 169 */
+/* 173 */
 /***/ function(module, exports) {
 
 	/**
@@ -31094,7 +31173,7 @@
 
 
 /***/ },
-/* 170 */
+/* 174 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31103,7 +31182,7 @@
 	var MAGNITUDE_DIGITS = 3; // ditto
 	var SEP = ''; // set to '_' for easier debugging 
 
-	var utils = __webpack_require__(171);
+	var utils = __webpack_require__(175);
 
 	exports.collate = function (a, b) {
 
@@ -31453,7 +31532,7 @@
 
 
 /***/ },
-/* 171 */
+/* 175 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -31528,11 +31607,11 @@
 	};
 
 /***/ },
-/* 172 */
+/* 176 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
-	var immediate = __webpack_require__(173);
+	var immediate = __webpack_require__(177);
 
 	/* istanbul ignore next */
 	function INTERNAL() {}
@@ -31813,7 +31892,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 173 */
+/* 177 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global, process) {'use strict';
@@ -31893,7 +31972,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(4)))
 
 /***/ },
-/* 174 */
+/* 178 */
 /***/ function(module, exports) {
 
 	// Generated by CoffeeScript 1.9.2
@@ -31921,7 +32000,7 @@
 
 
 /***/ },
-/* 175 */
+/* 179 */
 /***/ function(module, exports, __webpack_require__) {
 
 	(function (factory) {
@@ -32630,7 +32709,7 @@
 
 
 /***/ },
-/* 176 */
+/* 180 */
 /***/ function(module, exports) {
 
 	'use strict';
