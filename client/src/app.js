@@ -11,7 +11,7 @@ window.onload = function(){
 
     'use strict';
 
-    var ENTER_KEY = 13;
+    var ENTER_KEY = 13; 
     var db = new PouchDB('siterecord');
     var remoteCouch = 'http://localhost:5984/siterecord';
 
@@ -30,11 +30,17 @@ window.onload = function(){
       done();
     });
 
-    var dbTest =  [];
+
+
+// can grab params from a doc now!
+      var docArray = []
+
     db.allDocs({include_docs: true, descending: true}, function(err, doc) {
-      dbTest.push(doc.rows);
-      console.log(doc)
-    })
+      doc.rows.forEach(function(one){
+        docArray.push(one.id);
+      })
+      console.log(doc.rows, docArray)
+    });
 
     // db.changes({
     //   since: 'now',

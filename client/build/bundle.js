@@ -76,10 +76,14 @@
 	      done();
 	    });
 
-	    var dbTest = [];
+	    // can grab params from a doc now!
+	    var docArray = [];
+
 	    db.allDocs({ include_docs: true, descending: true }, function (err, doc) {
-	      dbTest.push(doc.rows);
-	      console.log(doc);
+	      doc.rows.forEach(function (one) {
+	        docArray.push(one.id);
+	      });
+	      console.log(doc.rows, docArray);
 	    });
 
 	    // db.changes({
