@@ -16,7 +16,9 @@ describe('Trench', function(){
     testContext = new Context();
 
     testTrench.generateID();
-    testTrench.addContext(testContext);
+
+    testContext = new Context(testTrench);
+    testContext.generateID();
   });
 
 
@@ -27,7 +29,7 @@ describe('Trench', function(){
   });
 
   it('should have a unique ID', function(){
-    assert.equal(testTrench.id, 'Test Site 55-40:1');
+    assert.equal(testTrench.id, 'Test Site 55-40:T1');
   });
 
   it('should have dimensions', function(){
@@ -36,8 +38,14 @@ describe('Trench', function(){
   });
 
   it('should contain an array of contexts', function(){
-    assert.deepEqual(testTrench.contexts, [testContext]);
-  })
+    var previousLength = testTrench.contexts.length;
+    testTrench.addContext(testContext);
+    assert.deepEqual(testTrench.contexts.length, previousLength + 1);
+  });
+
+  it('should increment contextCounter on counter ID assignment', function(){
+    assert.equal(testTrench.contextCounter, 1);
+  });
 
 
 });

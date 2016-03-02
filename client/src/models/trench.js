@@ -8,7 +8,7 @@ this.contextCounter = 0;
 
 this.generateID = function(){
   this.site.trenchCounter += 1;
-  this.id = this.site.id + ':' + this.site.trenchCounter;
+  this.id = this.site.id + ':T' + this.site.trenchCounter;
 };
 
 this.addContext = function(context){

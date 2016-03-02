@@ -5,7 +5,7 @@ this.trench = trench;
 
 this.generateID = function(){
   this.trench.contextCounter += 1;
-  this.id = this.trench.id + ':' + this.trench.contextCounter;
+  this.id = this.trench.id + ':C' + this.trench.contextCounter;
 }
 };
 

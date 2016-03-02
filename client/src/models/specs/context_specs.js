@@ -22,7 +22,11 @@ describe('Context', function(){
     assert.isOk(testContext);
   });
 
+  it('should belong to a trench', function(){
+    assert.equal(testContext.trench, testTrench);
+  })
+
   it('should have an ID', function(){
-    assert.equal(testContext.id, 'Test Site 55-40:1:1');
+    assert.equal(testContext.id, 'Test Site 55-40:T1:C1');
   });
 })
