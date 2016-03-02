@@ -2,9 +2,9 @@ var Trench = function(site, length, breadth){
 this.length = length;
 this.breadth = breadth;
 this.contexts = [];
-this.counter = 0;
 this.site = site;
 this.id = undefined;
+this.contextCounter = 0;
 
 this.generateID = function(){
   this.site.trenchCounter += 1;
@@ -13,7 +13,8 @@ this.generateID = function(){
 
 this.addContext = function(context){
 this.contexts.push(context);
-}
+};
+
 };
 
 module.exports = Trench;

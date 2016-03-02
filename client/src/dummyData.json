@@ -1,0 +1,21 @@
+var dummyData = [
+  {
+    "type": "site",
+    "name": "test site",
+  },
+  {
+    "type": "trench",
+    "name": "test trench"
+  },
+  {
+    "type": "context",
+    "name": "test context"
+  },
+  {
+    "type": "find",
+    "name": "test find"
+  }
+
+]
+
+module.exports = dummyData;

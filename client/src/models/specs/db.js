@@ -35,7 +35,6 @@ describe('PouchDb', function(){
 
   it('should accept documents', function(){
     return db.get(JSONDate).then(function(result){
-      console.log('result', result._id)
       expect(result._id).to.equal(JSONDate);
     });
   });

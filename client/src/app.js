@@ -1,11 +1,12 @@
 window.onload = function(){
   console.log('app loaded');
+
   var React = require('react');
   var ReactDOM = require('react-dom');
-  var TrenchBox = require('./components/trenchBox.jsx');
+  var SiteBox = require('./components/SiteBox.jsx');
+  var dummyData = require('./dummyData.json');
 
   (function() {
-
 
     var PouchDB = require('pouchdb');
 
@@ -18,26 +19,20 @@ window.onload = function(){
     var date = new Date();
     var JSONDate = date.toJSON();
 
+    db.destroy().then(
+      db.bulkDocs(dummyData).then(function(result){
+        console.log('data loaded: ', result);
+      }).catch(function(err){
+        console.log(err);
+      });
+      );
 
-    db.put({
-      "_id": JSONDate,
-      "title": 'testDoc'
-    }).then(function(response){
-      console.log(response);
-      done();
-    }).catch(function(err){
-      console.log(err);
-      done();
-    });
-
-
-
-// can grab params from a doc now!
-      var docArray = []
+    var docArray = [];
 
     db.allDocs({include_docs: true, descending: true}, function(err, doc) {
       doc.rows.forEach(function(one){
-        docArray.push(one.id);
+        console.log('populating seed data')
+        docArray.push(one.doc.type);
       })
       console.log(doc.rows, docArray)
     });
@@ -50,7 +45,7 @@ window.onload = function(){
   })();
 
   ReactDOM.render(
-    <TrenchBox/>,
+    <SiteBox/>,
     document.getElementById('legacyapp')
     );
 }

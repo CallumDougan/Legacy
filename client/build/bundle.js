@@ -48,9 +48,11 @@
 
 	window.onload = function () {
 	  console.log('app loaded');
+
 	  var React = __webpack_require__(1);
 	  var ReactDOM = __webpack_require__(158);
-	  var TrenchBox = __webpack_require__(159);
+	  var SiteBox = __webpack_require__(182);
+	  var dummyData = __webpack_require__(181);
 
 	  (function () {
 
@@ -65,23 +67,21 @@
 	    var date = new Date();
 	    var JSONDate = date.toJSON();
 
-	    db.put({
-	      "_id": JSONDate,
-	      "title": 'testDoc'
-	    }).then(function (response) {
-	      console.log(response);
-	      done();
+	    db.destroy().then();
+
+	    db.bulkDocs(dummyData).then(function (result) {
+	      console.log('data loaded: ', result);
 	    }).catch(function (err) {
 	      console.log(err);
-	      done();
 	    });
 
-	    // can grab params from a doc now!
 	    var docArray = [];
+	    console.log('doc count', db.info());
 
+	    console.log('populating seed data');
 	    db.allDocs({ include_docs: true, descending: true }, function (err, doc) {
 	      doc.rows.forEach(function (one) {
-	        docArray.push(one.id);
+	        docArray.push(one.doc.type);
 	      });
 	      console.log(doc.rows, docArray);
 	    });
@@ -92,7 +92,7 @@
 	    // }).on('change', showSites);
 	  })();
 
-	  ReactDOM.render(React.createElement(TrenchBox, null), document.getElementById('legacyapp'));
+	  ReactDOM.render(React.createElement(SiteBox, null), document.getElementById('legacyapp'));
 	};
 
 /***/ },
@@ -19697,36 +19697,7 @@
 
 
 /***/ },
-/* 159 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var React = __webpack_require__(1);
-
-	var Trench = __webpack_require__(160);
-	var ContextBox = __webpack_require__(161);
-
-	var TrenchBox = React.createClass({
-	  displayName: 'TrenchBox',
-
-	  render: function render() {
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'h2',
-	        null,
-	        'TrenchBox'
-	      ),
-	      React.createElement(ContextBox, null)
-	    );
-	  }
-	});
-
-	module.exports = TrenchBox;
-
-/***/ },
+/* 159 */,
 /* 160 */
 /***/ function(module, exports) {
 
@@ -32916,6 +32887,111 @@
 	  }
 	};
 
+
+/***/ },
+/* 181 */
+/***/ function(module, exports) {
+
+	var dummyData = [
+	  {
+	    "type": "site",
+	    "name": "test site",
+	  },
+	  {
+	    "type": "trench",
+	    "name": "test trench"
+	  },
+	  {
+	    "type": "context",
+	    "name": "test context"
+	  },
+	  {
+	    "type": "find",
+	    "name": "test find"
+	  }
+
+	]
+
+	module.exports = dummyData;
+
+/***/ },
+/* 182 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(1);
+
+	var Site = __webpack_require__(183);
+	var TrenchBox = __webpack_require__(184);
+
+	var SiteBox = React.createClass({
+	  displayName: 'SiteBox',
+
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'b',
+	        null,
+	        React.createElement(
+	          'h1',
+	          null,
+	          'SiteBox'
+	        )
+	      ),
+	      React.createElement(TrenchBox, null)
+	    );
+	  }
+	});
+
+	module.exports = SiteBox;
+
+/***/ },
+/* 183 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	var Site = function Site(name, lat, lng) {
+	  this.trenchCounter = 0;
+	  this.name = name;
+	  this.latLng = lat + '-' + lng;
+	  this.id = name + ' ' + this.latLng;
+	};
+
+	module.exports = Site;
+
+/***/ },
+/* 184 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(1);
+
+	var Trench = __webpack_require__(160);
+	var ContextBox = __webpack_require__(161);
+
+	var TrenchBox = React.createClass({
+	  displayName: 'TrenchBox',
+
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'h2',
+	        null,
+	        'TrenchBox'
+	      ),
+	      React.createElement(ContextBox, null)
+	    );
+	  }
+	});
+
+	module.exports = TrenchBox;
 
 /***/ }
 /******/ ]);
