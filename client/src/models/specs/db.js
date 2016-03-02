@@ -9,26 +9,21 @@ var PouchDb = require('pouchdb');
 
 
 describe('PouchDb', function(){
-  beforeEach(function(){
+  beforeEach(function(done){
 
     db = new PouchDb('test');
 
     date = new Date();
     JSONDate = date.toJSON();
 
-
     db.put({
       "_id": JSONDate,
       "title": 'testDoc'
     }).then(function(response){
-      console.log(response);
       done();
     }).catch(function(err){
-      console.log(err);
       done();
     });
-
-
   });
 
   // TESTING BEGINS
@@ -39,7 +34,9 @@ describe('PouchDb', function(){
 
 
   it('should accept documents', function(){
-    console.log('test', db.get(JSONDate))
-    db.get(JSONDate).should.eventually.equal(1).notify(done);
+    return db.get(JSONDate).then(function(result){
+      console.log('result', result._id)
+      expect(result._id).to.equal(JSONDate);
+    });
   });
 });
