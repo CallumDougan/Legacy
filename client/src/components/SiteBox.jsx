@@ -5,9 +5,11 @@ var TrenchBox = require('./TrenchBox.jsx');
 
 var SiteBox = React.createClass({
   render: function(){
+    console.log('db in SiteBox',  this.props.db.allDocs({include_docs: true, descending: true}))
     return(
       <div>
-      <b><h1>SiteBox</h1></b>
+      <h1>SiteBox</h1>
+      {this.props.id}
       <TrenchBox/>
       </div>
       )

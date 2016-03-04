@@ -51,12 +51,12 @@
 
 	  var React = __webpack_require__(1);
 	  var ReactDOM = __webpack_require__(158);
-	  var SiteBox = __webpack_require__(182);
-	  var dummyData = __webpack_require__(181);
+	  var SiteBox = __webpack_require__(159);
+	  var dummyData = __webpack_require__(167);
 
 	  (function () {
 
-	    var PouchDB = __webpack_require__(165);
+	    var PouchDB = __webpack_require__(168);
 
 	    'use strict';
 
@@ -67,32 +67,28 @@
 	    var date = new Date();
 	    var JSONDate = date.toJSON();
 
-	    db.destroy().then();
-
-	    db.bulkDocs(dummyData).then(function (result) {
+	    db.destroy().then(db.bulkDocs(dummyData).then(function (result) {
 	      console.log('data loaded: ', result);
 	    }).catch(function (err) {
 	      console.log(err);
-	    });
+	    }));
 
 	    var docArray = [];
-	    console.log('doc count', db.info());
 
-	    console.log('populating seed data');
 	    db.allDocs({ include_docs: true, descending: true }, function (err, doc) {
+	      console.log('populating seed data');
 	      doc.rows.forEach(function (one) {
 	        docArray.push(one.doc.type);
 	      });
 	      console.log(doc.rows, docArray);
 	    });
-
+	    console.log('db', db);
 	    // db.changes({
 	    //   since: 'now',
 	    //   live: true
 	    // }).on('change', showSites);
+	    ReactDOM.render(React.createElement(SiteBox, { db: db, id: 'test' }), document.getElementById('legacyapp'));
 	  })();
-
-	  ReactDOM.render(React.createElement(SiteBox, null), document.getElementById('legacyapp'));
 	};
 
 /***/ },
@@ -19697,8 +19693,84 @@
 
 
 /***/ },
-/* 159 */,
+/* 159 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(1);
+
+	var Site = __webpack_require__(160);
+	var TrenchBox = __webpack_require__(161);
+
+	var SiteBox = React.createClass({
+	  displayName: 'SiteBox',
+
+	  render: function render() {
+	    console.log('db in SiteBox', this.props.db.allDocs({ include_docs: true, descending: true }));
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'h1',
+	        null,
+	        'SiteBox'
+	      ),
+	      this.props.id,
+	      React.createElement(TrenchBox, null)
+	    );
+	  }
+	});
+
+	module.exports = SiteBox;
+
+/***/ },
 /* 160 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	var Site = function Site(name, lat, lng) {
+	  this.trenchCounter = 0;
+	  this.name = name;
+	  this.latLng = lat + '-' + lng;
+	  this.id = name + ' ' + this.latLng;
+	};
+
+	module.exports = Site;
+
+/***/ },
+/* 161 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(1);
+
+	var Trench = __webpack_require__(162);
+	var ContextBox = __webpack_require__(163);
+
+	var TrenchBox = React.createClass({
+	  displayName: 'TrenchBox',
+
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'h2',
+	        null,
+	        'TrenchBox'
+	      ),
+	      React.createElement(ContextBox, null)
+	    );
+	  }
+	});
+
+	module.exports = TrenchBox;
+
+/***/ },
+/* 162 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -19707,13 +19779,13 @@
 	  this.length = length;
 	  this.breadth = breadth;
 	  this.contexts = [];
-	  this.counter = 0;
 	  this.site = site;
 	  this.id = undefined;
+	  this.contextCounter = 0;
 
 	  this.generateID = function () {
 	    this.site.trenchCounter += 1;
-	    this.id = this.site.id + ':' + this.site.trenchCounter;
+	    this.id = this.site.id + ':T' + this.site.trenchCounter;
 	  };
 
 	  this.addContext = function (context) {
@@ -19724,15 +19796,15 @@
 	module.exports = Trench;
 
 /***/ },
-/* 161 */
+/* 163 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var React = __webpack_require__(1);
 
-	var Context = __webpack_require__(162);
-	var FindBox = __webpack_require__(163);
+	var Context = __webpack_require__(164);
+	var FindBox = __webpack_require__(165);
 
 	var ContextBox = React.createClass({
 	  displayName: 'ContextBox',
@@ -19754,24 +19826,32 @@
 	module.exports = ContextBox;
 
 /***/ },
-/* 162 */
+/* 164 */
 /***/ function(module, exports) {
 
-	"use strict";
+	'use strict';
 
-	var Context = function Context() {};
+	var Context = function Context(trench) {
+	  this.id = undefined;
+	  this.trench = trench;
+
+	  this.generateID = function () {
+	    this.trench.contextCounter += 1;
+	    this.id = this.trench.id + ':C' + this.trench.contextCounter;
+	  };
+	};
 
 	module.exports = Context;
 
 /***/ },
-/* 163 */
+/* 165 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var React = __webpack_require__(1);
 
-	var Find = __webpack_require__(164);
+	var Find = __webpack_require__(166);
 
 	var FindBox = React.createClass({
 	  displayName: 'FindBox',
@@ -19794,7 +19874,7 @@
 	module.exports = FindBox;
 
 /***/ },
-/* 164 */
+/* 166 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -19806,26 +19886,52 @@
 	module.exports = Find;
 
 /***/ },
-/* 165 */
+/* 167 */
+/***/ function(module, exports) {
+
+	var dummyData = [
+	  {
+	    "type": "site",
+	    "name": "test site",
+	  },
+	  {
+	    "type": "trench",
+	    "name": "test trench"
+	  },
+	  {
+	    "type": "context",
+	    "name": "test context"
+	  },
+	  {
+	    "type": "find",
+	    "name": "test find"
+	  }
+
+	]
+
+	module.exports = dummyData;
+
+/***/ },
+/* 168 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process, global) {'use strict';
 
 	function _interopDefault (ex) { return 'default' in ex ? ex['default'] : ex; }
 
-	var jsExtend = __webpack_require__(166);
+	var jsExtend = __webpack_require__(169);
 	var jsExtend__default = _interopDefault(jsExtend);
-	var inherits = _interopDefault(__webpack_require__(167));
-	var collections = _interopDefault(__webpack_require__(168));
-	var events = __webpack_require__(169);
-	var getArguments = _interopDefault(__webpack_require__(170));
-	var debug = _interopDefault(__webpack_require__(171));
-	var pouchCollate = __webpack_require__(174);
+	var inherits = _interopDefault(__webpack_require__(170));
+	var collections = _interopDefault(__webpack_require__(171));
+	var events = __webpack_require__(172);
+	var getArguments = _interopDefault(__webpack_require__(173));
+	var debug = _interopDefault(__webpack_require__(174));
+	var pouchCollate = __webpack_require__(177);
 	var pouchCollate__default = _interopDefault(pouchCollate);
-	var lie = _interopDefault(__webpack_require__(176));
-	var scopedEval = _interopDefault(__webpack_require__(178));
-	var Md5 = _interopDefault(__webpack_require__(179));
-	var vuvuzela = _interopDefault(__webpack_require__(180));
+	var lie = _interopDefault(__webpack_require__(179));
+	var scopedEval = _interopDefault(__webpack_require__(181));
+	var Md5 = _interopDefault(__webpack_require__(182));
+	var vuvuzela = _interopDefault(__webpack_require__(183));
 
 	/* istanbul ignore next */
 	var PouchPromise = typeof Promise === 'function' ? Promise : lie;
@@ -30195,7 +30301,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), (function() { return this; }())))
 
 /***/ },
-/* 166 */
+/* 169 */
 /***/ function(module, exports, __webpack_require__) {
 
 	(function(factory) {
@@ -30234,7 +30340,7 @@
 
 
 /***/ },
-/* 167 */
+/* 170 */
 /***/ function(module, exports) {
 
 	if (typeof Object.create === 'function') {
@@ -30263,7 +30369,7 @@
 
 
 /***/ },
-/* 168 */
+/* 171 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -30338,7 +30444,7 @@
 
 
 /***/ },
-/* 169 */
+/* 172 */
 /***/ function(module, exports) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -30642,7 +30748,7 @@
 
 
 /***/ },
-/* 170 */
+/* 173 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -30666,7 +30772,7 @@
 	}
 
 /***/ },
-/* 171 */
+/* 174 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -30676,7 +30782,7 @@
 	 * Expose `debug()` as the module.
 	 */
 
-	exports = module.exports = __webpack_require__(172);
+	exports = module.exports = __webpack_require__(175);
 	exports.log = log;
 	exports.formatArgs = formatArgs;
 	exports.save = save;
@@ -30840,7 +30946,7 @@
 
 
 /***/ },
-/* 172 */
+/* 175 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -30856,7 +30962,7 @@
 	exports.disable = disable;
 	exports.enable = enable;
 	exports.enabled = enabled;
-	exports.humanize = __webpack_require__(173);
+	exports.humanize = __webpack_require__(176);
 
 	/**
 	 * The currently active debug mode names, and names to skip.
@@ -31043,7 +31149,7 @@
 
 
 /***/ },
-/* 173 */
+/* 176 */
 /***/ function(module, exports) {
 
 	/**
@@ -31174,7 +31280,7 @@
 
 
 /***/ },
-/* 174 */
+/* 177 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31183,7 +31289,7 @@
 	var MAGNITUDE_DIGITS = 3; // ditto
 	var SEP = ''; // set to '_' for easier debugging 
 
-	var utils = __webpack_require__(175);
+	var utils = __webpack_require__(178);
 
 	exports.collate = function (a, b) {
 
@@ -31533,7 +31639,7 @@
 
 
 /***/ },
-/* 175 */
+/* 178 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -31608,11 +31714,11 @@
 	};
 
 /***/ },
-/* 176 */
+/* 179 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
-	var immediate = __webpack_require__(177);
+	var immediate = __webpack_require__(180);
 
 	/* istanbul ignore next */
 	function INTERNAL() {}
@@ -31893,7 +31999,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 177 */
+/* 180 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global, process) {'use strict';
@@ -31973,7 +32079,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(4)))
 
 /***/ },
-/* 178 */
+/* 181 */
 /***/ function(module, exports) {
 
 	// Generated by CoffeeScript 1.9.2
@@ -32001,7 +32107,7 @@
 
 
 /***/ },
-/* 179 */
+/* 182 */
 /***/ function(module, exports, __webpack_require__) {
 
 	(function (factory) {
@@ -32710,7 +32816,7 @@
 
 
 /***/ },
-/* 180 */
+/* 183 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -32887,111 +32993,6 @@
 	  }
 	};
 
-
-/***/ },
-/* 181 */
-/***/ function(module, exports) {
-
-	var dummyData = [
-	  {
-	    "type": "site",
-	    "name": "test site",
-	  },
-	  {
-	    "type": "trench",
-	    "name": "test trench"
-	  },
-	  {
-	    "type": "context",
-	    "name": "test context"
-	  },
-	  {
-	    "type": "find",
-	    "name": "test find"
-	  }
-
-	]
-
-	module.exports = dummyData;
-
-/***/ },
-/* 182 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var React = __webpack_require__(1);
-
-	var Site = __webpack_require__(183);
-	var TrenchBox = __webpack_require__(184);
-
-	var SiteBox = React.createClass({
-	  displayName: 'SiteBox',
-
-	  render: function render() {
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'b',
-	        null,
-	        React.createElement(
-	          'h1',
-	          null,
-	          'SiteBox'
-	        )
-	      ),
-	      React.createElement(TrenchBox, null)
-	    );
-	  }
-	});
-
-	module.exports = SiteBox;
-
-/***/ },
-/* 183 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	var Site = function Site(name, lat, lng) {
-	  this.trenchCounter = 0;
-	  this.name = name;
-	  this.latLng = lat + '-' + lng;
-	  this.id = name + ' ' + this.latLng;
-	};
-
-	module.exports = Site;
-
-/***/ },
-/* 184 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var React = __webpack_require__(1);
-
-	var Trench = __webpack_require__(160);
-	var ContextBox = __webpack_require__(161);
-
-	var TrenchBox = React.createClass({
-	  displayName: 'TrenchBox',
-
-	  render: function render() {
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'h2',
-	        null,
-	        'TrenchBox'
-	      ),
-	      React.createElement(ContextBox, null)
-	    );
-	  }
-	});
-
-	module.exports = TrenchBox;
 
 /***/ }
 /******/ ]);
