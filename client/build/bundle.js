@@ -52,44 +52,48 @@
 	  var React = __webpack_require__(1);
 	  var ReactDOM = __webpack_require__(158);
 	  var SiteBox = __webpack_require__(159);
-	  var dummyData = __webpack_require__(167);
 
-	  (function () {
-
-	    var PouchDB = __webpack_require__(168);
-
-	    'use strict';
-
-	    var ENTER_KEY = 13;
-	    var db = new PouchDB('siterecord');
-	    var remoteCouch = 'http://localhost:5984/siterecord';
-
-	    var date = new Date();
-	    var JSONDate = date.toJSON();
-
-	    db.destroy().then(db.bulkDocs(dummyData).then(function (result) {
-	      console.log('data loaded: ', result);
-	    }).catch(function (err) {
-	      console.log(err);
-	    }));
-
-	    var docArray = [];
-
-	    db.allDocs({ include_docs: true, descending: true }, function (err, doc) {
-	      console.log('populating seed data');
-	      doc.rows.forEach(function (one) {
-	        docArray.push(one.doc.type);
-	      });
-	      console.log(doc.rows, docArray);
-	    });
-	    console.log('db', db);
-	    // db.changes({
-	    //   since: 'now',
-	    //   live: true
-	    // }).on('change', showSites);
-	    ReactDOM.render(React.createElement(SiteBox, { db: db, id: 'test' }), document.getElementById('legacyapp'));
-	  })();
+	  ReactDOM.render(React.createElement(SiteBox, null), document.getElementById('legacyapp'));
 	};
+
+	// var dummyData = require('./dummyData.json');
+	// var db = null;
+
+	// (function() {
+
+	//   var PouchDB = require('pouchdb');
+
+	//   'use strict';
+
+	//   var ENTER_KEY = 13;
+	//   db = new PouchDB('siterecord');
+	//   var remoteCouch = 'http://localhost:5984/siterecord';
+
+	//   var date = new Date();
+	//   var JSONDate = date.toJSON();
+
+	//   db.destroy().then(
+	//     db.bulkDocs(dummyData).then(function(result){
+	//       console.log('data loaded: ', result);
+	//     }).catch(function(err){
+	//       console.log(err);
+	//     })
+	//     );
+
+	//   var docArray = [];
+
+	//   db.allDocs({include_docs: true, descending: true}, function(err, doc) {
+	//     console.log('populating seed data')
+	//     doc.rows.forEach(function(one){
+	//       docArray.push(one.doc);
+	//     })
+	//     console.log(doc.rows, docArray)
+	//   })
+
+	//     db.changes({
+	//       since: 'now',
+	//       live: true
+	//     }).on('change', showSites);
 
 /***/ },
 /* 1 */
@@ -19699,6 +19703,7 @@
 	'use strict';
 
 	var React = __webpack_require__(1);
+	var PouchDB = __webpack_require__(168);
 
 	var Site = __webpack_require__(160);
 	var TrenchBox = __webpack_require__(161);
@@ -19706,8 +19711,33 @@
 	var SiteBox = React.createClass({
 	  displayName: 'SiteBox',
 
+
+	  componentDidMount: function componentDidMount() {
+	    var dummyData = __webpack_require__(167);
+	    var siteDb = new PouchDB('siterecord');
+	    var remoteCouch = 'http://localhost:5984/siterecord';
+	    siteDb.destroy().then(siteDb.bulkDocs(dummyData).then(function (result) {
+	      console.log('data loaded: ', result);
+	    }).catch(function (err) {
+	      console.log(err);
+	    }));
+	    var siteArray = [];
+	    siteDb.allDocs({ include_docs: true, descending: true }).then(function (result) {
+	      result.rows.forEach(function (one) {
+	        if (one.doc.type === 'site') {
+	          siteArray.push(one.doc.type);
+	        }
+	      });
+	      this.setState({ sites: siteArray });
+	    }.bind(this));
+	  },
+
+	  getInitialState: function getInitialState() {
+	    return { sites: [] };
+	  },
+
 	  render: function render() {
-	    console.log('db in SiteBox', this.props.db.allDocs({ include_docs: true, descending: true }));
+	    console.log('I render', this.state.sites);
 	    return React.createElement(
 	      'div',
 	      null,
@@ -19716,7 +19746,10 @@
 	        null,
 	        'SiteBox'
 	      ),
-	      this.props.id,
+	      'Test: ',
+	      this.props.test,
+	      'Sites: ',
+	      this.state.sites,
 	      React.createElement(TrenchBox, null)
 	    );
 	  }
