@@ -5,13 +5,17 @@ var PouchDB = require('pouchdb');
 var Site = require('../models/site.js');
 
 var SiteList = React.createClass({
+
+  handleClick: function(){
+    console.log('clicked a site link');
+  },
+
   render: function(){
     var siteNodes = this.props.sites.map(function(site){
       return(
-        <li><a href="" siteId={ site.id }>{ site.name }</a></li>
+        <li><a href="" key={ site.id } >{ site.name }</a></li>
         )
-    })
-
+    });
 
     return(
       <ul>

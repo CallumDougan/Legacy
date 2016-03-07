@@ -19710,19 +19710,21 @@
 	var SiteList = __webpack_require__(184);
 	var SiteForm = __webpack_require__(185);
 
+	var dummyData = __webpack_require__(167);
+	var siteDb = new PouchDB('siterecord');
+	var remoteCouch = 'http://localhost:5984/siterecord';
+
 	var SiteBox = React.createClass({
 	  displayName: 'SiteBox',
 
 
 	  componentDidMount: function componentDidMount() {
-	    var dummyData = __webpack_require__(167);
-	    var siteDb = new PouchDB('siterecord');
-	    var remoteCouch = 'http://localhost:5984/siterecord';
-	    siteDb.destroy().then(siteDb.bulkDocs(dummyData).then(function (result) {
+
+	    siteDb.bulkDocs(dummyData).then(function (result) {
 	      console.log('data loaded: ', result);
 	    }).catch(function (err) {
 	      console.log(err);
-	    }));
+	    });
 
 	    var siteArray = [];
 	    siteDb.allDocs({ include_docs: true, descending: true }).then(function (result) {
@@ -19733,6 +19735,30 @@
 	      });
 	      this.setState({ sites: siteArray });
 	    }.bind(this));
+	  },
+
+	  handleSiteSubmit: function handleSiteSubmit() {
+	    // stuff
+	    var date = new Date();
+	    var JSONDate = date.toJSON();
+	    siteDb.put({
+	      _id: JSONDate,
+	      name: 'test',
+	      type: 'site',
+	      lat: '43',
+	      long: '43'
+	    }).then(function (response) {
+	      console.log(response);
+	      siteDb.allDocs({ include_docs: true, descending: true }).then(function (result) {
+	        result.rows.forEach(function (one) {
+	          if (one.doc.type === 'site') {
+	            console.log(one.doc);
+	          }
+	        });
+	      }.bind(this));
+	    }).catch(function (err) {
+	      console.log(err);
+	    });
 	  },
 
 	  getInitialState: function getInitialState() {
@@ -19750,7 +19776,7 @@
 	        'SiteBox'
 	      ),
 	      React.createElement(SiteList, { sites: this.state.sites }),
-	      React.createElement(SiteForm, null),
+	      React.createElement(SiteForm, { onSiteSubmit: this.handleSiteSubmit }),
 	      React.createElement(TrenchBox, null)
 	    );
 	  }
@@ -33046,6 +33072,11 @@
 	var SiteList = React.createClass({
 	  displayName: 'SiteList',
 
+
+	  handleClick: function handleClick() {
+	    console.log('clicked a site link');
+	  },
+
 	  render: function render() {
 	    var siteNodes = this.props.sites.map(function (site) {
 	      return React.createElement(
@@ -33053,7 +33084,7 @@
 	        null,
 	        React.createElement(
 	          'a',
-	          { href: '', siteId: site.id },
+	          { href: '', key: site.id },
 	          site.name
 	        )
 	      );
@@ -33084,11 +33115,48 @@
 	  displayName: 'SiteForm',
 
 
+	  getInitialState: function getInitialState() {
+	    return { name: '', type: '', lat: '', long: '' };
+	  },
+
+	  handleSubmit: function handleSubmit(e) {
+	    console.log('submitting site...', this.props.siteDb);
+	    e.preventDefault();
+
+	    var name = this.state.name.trim();
+	    var lat = this.state.lat.trim();
+	    var long = this.state.long.trim();
+
+	    this.setState({ name: name, lat: lat, long: long });
+	    this.props.onSiteSubmit({ name: name, lat: lat, long: long });
+	  },
+
 	  render: function render() {
 	    return React.createElement(
-	      'p',
+	      'div',
 	      null,
-	      'SiteForm here'
+	      React.createElement(
+	        'form',
+	        { onSubmit: this.handleSubmit },
+	        React.createElement('input', {
+	          type: 'text',
+	          placeholder: 'Site name',
+	          value: this.state.name,
+	          onChange: this.handleSiteNameChange }),
+	        React.createElement('input', {
+	          type: 'text',
+	          placeholder: 'Site latitude',
+	          value: this.state.latitude,
+	          onChange: this.handleLatitudeChange }),
+	        React.createElement('input', {
+	          type: 'text',
+	          placeholder: 'Site longtitude',
+	          value: this.state.longtitude,
+	          onChange: this.handleLongtitudeChange }),
+	        React.createElement('input', {
+	          type: 'submit',
+	          value: 'Submit site' })
+	      )
 	    );
 	  }
 	});

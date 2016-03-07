@@ -7,18 +7,20 @@ var TrenchBox = require('./TrenchBox.jsx');
 var SiteList = require('./SiteList.jsx');
 var SiteForm = require('./SiteForm.jsx');
 
+var dummyData = require('../dummyData.json');
+var siteDb = new PouchDB('siterecord');
+var remoteCouch = 'http://localhost:5984/siterecord';
+
 var SiteBox = React.createClass({
 
   componentDidMount: function(){
-    var dummyData = require('../dummyData.json');
-    var siteDb = new PouchDB('siterecord');
-    var remoteCouch = 'http://localhost:5984/siterecord';
-    siteDb.destroy().then(
+
+
       siteDb.bulkDocs(dummyData).then(function(result){
         console.log('data loaded: ', result);
       }).catch(function(err){
         console.log(err);
-      }));
+      });
 
     var siteArray = [];
     siteDb.allDocs({include_docs: true, descending: true}).then(function(result){
@@ -29,7 +31,30 @@ var SiteBox = React.createClass({
       });
       this.setState( { sites: siteArray } );
     }.bind(this));
+  },
 
+  handleSiteSubmit: function(){
+    // stuff
+    var date = new Date;
+    var JSONDate = date.toJSON();
+    siteDb.put({
+      _id: JSONDate,
+      name: 'test',
+      type: 'site',
+      lat: '43',
+      long: '43'
+    }).then(function(response){
+      console.log(response);
+      siteDb.allDocs({include_docs: true, descending: true}).then(function(result){
+        result.rows.forEach(function(one){
+          if(one.doc.type === 'site'){
+          console.log(one.doc)
+          }
+        });
+      }.bind(this));
+    }).catch(function(err){
+      console.log(err);
+    });
   },
 
   getInitialState: function(){
@@ -42,7 +67,7 @@ var SiteBox = React.createClass({
       <div>
       <h1>SiteBox</h1>
       <SiteList sites={ this.state.sites }/>
-      <SiteForm/>
+      <SiteForm onSiteSubmit={ this.handleSiteSubmit }/>
       <TrenchBox/>
       </div>
       )
