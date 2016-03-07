@@ -9,12 +9,6 @@ var SiteBox = require('./components/SiteBox.jsx');
       <SiteBox/>,
       document.getElementById('legacyapp')
       );
-
-
-
-
-
-
 }
 
 // var dummyData = require('./dummyData.json');

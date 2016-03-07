@@ -19707,6 +19707,8 @@
 
 	var Site = __webpack_require__(160);
 	var TrenchBox = __webpack_require__(161);
+	var SiteList = __webpack_require__(184);
+	var SiteForm = __webpack_require__(185);
 
 	var SiteBox = React.createClass({
 	  displayName: 'SiteBox',
@@ -19721,11 +19723,12 @@
 	    }).catch(function (err) {
 	      console.log(err);
 	    }));
+
 	    var siteArray = [];
 	    siteDb.allDocs({ include_docs: true, descending: true }).then(function (result) {
 	      result.rows.forEach(function (one) {
 	        if (one.doc.type === 'site') {
-	          siteArray.push(one.doc.type);
+	          siteArray.push(one.doc);
 	        }
 	      });
 	      this.setState({ sites: siteArray });
@@ -19746,10 +19749,8 @@
 	        null,
 	        'SiteBox'
 	      ),
-	      'Test: ',
-	      this.props.test,
-	      'Sites: ',
-	      this.state.sites,
+	      React.createElement(SiteList, null),
+	      React.createElement(SiteForm, null),
 	      React.createElement(TrenchBox, null)
 	    );
 	  }
@@ -33026,6 +33027,57 @@
 	  }
 	};
 
+
+/***/ },
+/* 184 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(1);
+	var PouchDB = __webpack_require__(168);
+
+	var Site = __webpack_require__(160);
+
+	var SiteList = React.createClass({
+	  displayName: 'SiteList',
+
+	  render: function render() {
+	    return React.createElement(
+	      'p',
+	      null,
+	      'SiteList here'
+	    );
+	  }
+	});
+
+	module.exports = SiteList;
+
+/***/ },
+/* 185 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(1);
+	var PouchDB = __webpack_require__(168);
+
+	var Site = __webpack_require__(160);
+
+	var SiteForm = React.createClass({
+	  displayName: 'SiteForm',
+
+
+	  render: function render() {
+	    return React.createElement(
+	      'p',
+	      null,
+	      'SiteForm here'
+	    );
+	  }
+	});
+
+	module.exports = SiteForm;
 
 /***/ }
 /******/ ]);

@@ -4,6 +4,8 @@ var PouchDB = require('pouchdb');
 
 var Site = require('../models/site.js');
 var TrenchBox = require('./TrenchBox.jsx');
+var SiteList = require('./SiteList.jsx');
+var SiteForm = require('./SiteForm.jsx');
 
 var SiteBox = React.createClass({
 
@@ -16,17 +18,18 @@ var SiteBox = React.createClass({
         console.log('data loaded: ', result);
       }).catch(function(err){
         console.log(err);
-      })
-      );
+      }));
+
     var siteArray = [];
     siteDb.allDocs({include_docs: true, descending: true}).then(function(result){
       result.rows.forEach(function(one){
         if(one.doc.type === 'site'){
-          siteArray.push(one.doc.type)
+          siteArray.push(one.doc)
         }
       });
       this.setState( { sites: siteArray } );
-    }.bind(this))
+    }.bind(this));
+
   },
 
   getInitialState: function(){
@@ -38,8 +41,8 @@ var SiteBox = React.createClass({
     return(
       <div>
       <h1>SiteBox</h1>
-      Test: {this.props.test}
-      Sites: {this.state.sites}
+      <SiteList/>
+      <SiteForm/>
       <TrenchBox/>
       </div>
       )
