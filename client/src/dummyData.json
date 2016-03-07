@@ -4,6 +4,10 @@ var dummyData = [
     "name": "test site",
   },
   {
+    "type": "site",
+    "name": "another test site"
+  },
+  {
     "type": "trench",
     "name": "test trench"
   },

@@ -6,8 +6,17 @@ var Site = require('../models/site.js');
 
 var SiteList = React.createClass({
   render: function(){
+    var siteNodes = this.props.sites.map(function(site){
+      return(
+        <li><a href="" siteId={ site.id }>{ site.name }</a></li>
+        )
+    })
+
+
     return(
-      <p>SiteList here</p>
+      <ul>
+      { siteNodes }
+      </ul>
       )
   }
 });

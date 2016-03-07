@@ -41,7 +41,7 @@ var SiteBox = React.createClass({
     return(
       <div>
       <h1>SiteBox</h1>
-      <SiteList/>
+      <SiteList sites={ this.state.sites }/>
       <SiteForm/>
       <TrenchBox/>
       </div>

@@ -19749,7 +19749,7 @@
 	        null,
 	        'SiteBox'
 	      ),
-	      React.createElement(SiteList, null),
+	      React.createElement(SiteList, { sites: this.state.sites }),
 	      React.createElement(SiteForm, null),
 	      React.createElement(TrenchBox, null)
 	    );
@@ -19927,6 +19927,10 @@
 	  {
 	    "type": "site",
 	    "name": "test site",
+	  },
+	  {
+	    "type": "site",
+	    "name": "another test site"
 	  },
 	  {
 	    "type": "trench",
@@ -33043,10 +33047,22 @@
 	  displayName: 'SiteList',
 
 	  render: function render() {
+	    var siteNodes = this.props.sites.map(function (site) {
+	      return React.createElement(
+	        'li',
+	        null,
+	        React.createElement(
+	          'a',
+	          { href: '', siteId: site.id },
+	          site.name
+	        )
+	      );
+	    });
+
 	    return React.createElement(
-	      'p',
+	      'ul',
 	      null,
-	      'SiteList here'
+	      siteNodes
 	    );
 	  }
 	});
