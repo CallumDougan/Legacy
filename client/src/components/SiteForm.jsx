@@ -34,12 +34,12 @@ var SiteForm = React.createClass({
       <input
       type="text"
       placeholder="Site latitude"
-      value={ this.state.latitude }
+      value={ this.state.lat }
       onChange= { this.handleLatitudeChange }/>
       <input
       type="text"
       placeholder="Site longtitude"
-      value={ this.state.longtitude }
+      value={ this.state.long }
       onChange= { this.handleLongtitudeChange }/>
       <input
       type='submit'

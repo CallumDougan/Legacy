@@ -8,36 +8,41 @@ var SiteList = require('./SiteList.jsx');
 var SiteForm = require('./SiteForm.jsx');
 
 var dummyData = require('../dummyData.json');
-var siteDb = new PouchDB('siterecord');
-var remoteCouch = 'http://localhost:5984/siterecord';
+
 
 var SiteBox = React.createClass({
 
   componentDidMount: function(){
 
+    // NEW APPROACH: INSTEAD OF SEEDING DATA ONLOAD, WHY NOT JUST HAVE A BUTTON? REFACTOR TO REMOVE ALL ATTEMPTS TO SEED DATA ONLOAD
 
-      siteDb.bulkDocs(dummyData).then(function(result){
-        console.log('data loaded: ', result);
-      }).catch(function(err){
-        console.log(err);
-      });
-
+    var self = this;
     var siteArray = [];
-    siteDb.allDocs({include_docs: true, descending: true}).then(function(result){
+    var allDocs = undefined;
+
+    this.props.siteDb.allDocs({include_docs: true, descending: true
+    }).then(function(result){
+      console.log('alldocs result', result, self.props.siteDb)
       result.rows.forEach(function(one){
         if(one.doc.type === 'site'){
-          siteArray.push(one.doc)
+          siteArray.push(one.doc);
+          console.log('added:', one)
         }
       });
-      this.setState( { sites: siteArray } );
-    }.bind(this));
+    }).then(function(result){
+      console.log('state set');
+      self.setState( { sites: siteArray } );
+    }).catch(function(err){
+      console.log(err)
+    })
   },
 
   handleSiteSubmit: function(){
     // stuff
+    var self = this;
     var date = new Date;
     var JSONDate = date.toJSON();
-    siteDb.put({
+    this.props.siteDb.put({
       _id: JSONDate,
       name: 'test',
       type: 'site',
@@ -45,16 +50,16 @@ var SiteBox = React.createClass({
       long: '43'
     }).then(function(response){
       console.log(response);
-      siteDb.allDocs({include_docs: true, descending: true}).then(function(result){
+      self.props.siteDb.allDocs({include_docs: true, descending: true}).then(function(result){
         result.rows.forEach(function(one){
           if(one.doc.type === 'site'){
-          console.log(one.doc)
+            console.log(one.doc)
           }
         });
-      }.bind(this));
+      });
     }).catch(function(err){
       console.log(err);
-    });
+    }.bind(this));
   },
 
   getInitialState: function(){
@@ -67,7 +72,7 @@ var SiteBox = React.createClass({
       <div>
       <h1>SiteBox</h1>
       <SiteList sites={ this.state.sites }/>
-      <SiteForm onSiteSubmit={ this.handleSiteSubmit }/>
+      <SiteForm onSiteSubmit={ this.handleSiteSubmit } siteDb={ this.props.siteDb }/>
       <TrenchBox/>
       </div>
       )
