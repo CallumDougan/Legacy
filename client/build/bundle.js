@@ -32838,9 +32838,7 @@
 	  componentDidMount: function componentDidMount() {
 	
 	    // NEW APPROACH: INSTEAD OF SEEDING DATA ONLOAD, WHY NOT JUST HAVE A BUTTON? REFACTOR TO REMOVE ALL ATTEMPTS TO SEED DATA ONLOAD
-	
 	    var self = this;
-	    var allDocs = undefined;
 	
 	    this.props.siteDb.allDocs({ include_docs: true, descending: true
 	    }).then(function (result) {
@@ -32860,20 +32858,21 @@
 	  },
 	
 	  handleSiteSubmit: function handleSiteSubmit(site) {
-	    // stuff
 	    console.log('data?', this.state, site);
+	    var siteLogic = new Site(site.name, site.lat, site.long);
 	    var date = new Date();
 	    var JSONDate = date.toJSON();
 	
 	    this.props.siteDb.put({
 	      _id: JSONDate,
+	      site_id: siteLogic.id,
 	      name: site.name,
 	      type: 'site',
 	      lat: site.lat,
 	      long: site.long
 	    });
 	
-	    var newSites = this.state.sites.concat([site]);
+	    var newSites = siteArray.concat([site]);
 	
 	    this.setState({ sites: siteArray });
 	  },
@@ -33077,18 +33076,24 @@
 	  displayName: 'SiteList',
 	
 	
-	  handleClick: function handleClick() {
+	  handleClick: function handleClick(e) {
+	    e.preventDefault();
 	    console.log('clicked a site link');
 	  },
 	
 	  render: function render() {
+	    var self = this;
 	    var siteNodes = this.props.sites.map(function (site) {
 	      return React.createElement(
 	        'li',
 	        null,
 	        React.createElement(
 	          'a',
-	          { href: '', key: site.id },
+	          {
+	            href: '',
+	            id: site.id,
+	            key: site.site_id,
+	            onClick: self.handleClick },
 	          site.name
 	        )
 	      );
