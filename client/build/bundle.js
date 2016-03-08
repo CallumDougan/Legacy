@@ -51,10 +51,10 @@
 	
 	  var React = __webpack_require__(1);
 	  var ReactDOM = __webpack_require__(158);
-	  var PouchDB = __webpack_require__(160);
-	  var dummyData = __webpack_require__(185);
+	  var PouchDB = __webpack_require__(159);
+	  var dummyData = __webpack_require__(175);
 	
-	  var SiteBox = __webpack_require__(159);
+	  var SiteBox = __webpack_require__(176);
 	
 	  var siteDb = new PouchDB({ name: 'siterecord', auto_compaction: true });
 	  var remoteCouch = 'http://localhost:5984/siterecord';
@@ -19706,116 +19706,23 @@
 /* 159 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	var PouchDB = __webpack_require__(160);
-	
-	var Site = __webpack_require__(176);
-	var TrenchBox = __webpack_require__(177);
-	var SiteList = __webpack_require__(183);
-	var SiteForm = __webpack_require__(184);
-	
-	var dummyData = __webpack_require__(185);
-	
-	var SiteBox = React.createClass({
-	  displayName: 'SiteBox',
-	
-	
-	  componentDidMount: function componentDidMount() {
-	
-	    // NEW APPROACH: INSTEAD OF SEEDING DATA ONLOAD, WHY NOT JUST HAVE A BUTTON? REFACTOR TO REMOVE ALL ATTEMPTS TO SEED DATA ONLOAD
-	
-	    var self = this;
-	    var siteArray = [];
-	    var allDocs = undefined;
-	
-	    this.props.siteDb.allDocs({ include_docs: true, descending: true
-	    }).then(function (result) {
-	      console.log('alldocs result', result, self.props.siteDb);
-	      result.rows.forEach(function (one) {
-	        if (one.doc.type === 'site') {
-	          siteArray.push(one.doc);
-	          console.log('added:', one);
-	        }
-	      });
-	    }).then(function (result) {
-	      console.log('state set');
-	      self.setState({ sites: siteArray });
-	    }).catch(function (err) {
-	      console.log(err);
-	    });
-	  },
-	
-	  handleSiteSubmit: function handleSiteSubmit() {
-	    // stuff
-	    var self = this;
-	    var date = new Date();
-	    var JSONDate = date.toJSON();
-	    this.props.siteDb.put({
-	      _id: JSONDate,
-	      name: 'test',
-	      type: 'site',
-	      lat: '43',
-	      long: '43'
-	    }).then(function (response) {
-	      console.log(response);
-	      self.props.siteDb.allDocs({ include_docs: true, descending: true }).then(function (result) {
-	        result.rows.forEach(function (one) {
-	          if (one.doc.type === 'site') {
-	            console.log(one.doc);
-	          }
-	        });
-	      });
-	    }).catch(function (err) {
-	      console.log(err);
-	    }.bind(this));
-	  },
-	
-	  getInitialState: function getInitialState() {
-	    return { sites: [] };
-	  },
-	
-	  render: function render() {
-	    console.log('I render', this.state.sites);
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'h1',
-	        null,
-	        'SiteBox'
-	      ),
-	      React.createElement(SiteList, { sites: this.state.sites }),
-	      React.createElement(SiteForm, { onSiteSubmit: this.handleSiteSubmit, siteDb: this.props.siteDb }),
-	      React.createElement(TrenchBox, null)
-	    );
-	  }
-	});
-	
-	module.exports = SiteBox;
-
-/***/ },
-/* 160 */
-/***/ function(module, exports, __webpack_require__) {
-
 	/* WEBPACK VAR INJECTION */(function(process, global) {'use strict';
 	
 	function _interopDefault (ex) { return 'default' in ex ? ex['default'] : ex; }
 	
-	var jsExtend = __webpack_require__(161);
+	var jsExtend = __webpack_require__(160);
 	var jsExtend__default = _interopDefault(jsExtend);
-	var inherits = _interopDefault(__webpack_require__(162));
-	var collections = _interopDefault(__webpack_require__(163));
-	var events = __webpack_require__(164);
-	var getArguments = _interopDefault(__webpack_require__(165));
-	var debug = _interopDefault(__webpack_require__(166));
-	var pouchCollate = __webpack_require__(169);
+	var inherits = _interopDefault(__webpack_require__(161));
+	var collections = _interopDefault(__webpack_require__(162));
+	var events = __webpack_require__(163);
+	var getArguments = _interopDefault(__webpack_require__(164));
+	var debug = _interopDefault(__webpack_require__(165));
+	var pouchCollate = __webpack_require__(168);
 	var pouchCollate__default = _interopDefault(pouchCollate);
-	var lie = _interopDefault(__webpack_require__(171));
-	var scopedEval = _interopDefault(__webpack_require__(173));
-	var Md5 = _interopDefault(__webpack_require__(174));
-	var vuvuzela = _interopDefault(__webpack_require__(175));
+	var lie = _interopDefault(__webpack_require__(170));
+	var scopedEval = _interopDefault(__webpack_require__(172));
+	var Md5 = _interopDefault(__webpack_require__(173));
+	var vuvuzela = _interopDefault(__webpack_require__(174));
 	
 	/* istanbul ignore next */
 	var PouchPromise = typeof Promise === 'function' ? Promise : lie;
@@ -30185,7 +30092,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), (function() { return this; }())))
 
 /***/ },
-/* 161 */
+/* 160 */
 /***/ function(module, exports, __webpack_require__) {
 
 	(function(factory) {
@@ -30224,7 +30131,7 @@
 
 
 /***/ },
-/* 162 */
+/* 161 */
 /***/ function(module, exports) {
 
 	if (typeof Object.create === 'function') {
@@ -30253,7 +30160,7 @@
 
 
 /***/ },
-/* 163 */
+/* 162 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -30328,7 +30235,7 @@
 
 
 /***/ },
-/* 164 */
+/* 163 */
 /***/ function(module, exports) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -30632,7 +30539,7 @@
 
 
 /***/ },
-/* 165 */
+/* 164 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -30656,7 +30563,7 @@
 	}
 
 /***/ },
-/* 166 */
+/* 165 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -30666,7 +30573,7 @@
 	 * Expose `debug()` as the module.
 	 */
 	
-	exports = module.exports = __webpack_require__(167);
+	exports = module.exports = __webpack_require__(166);
 	exports.log = log;
 	exports.formatArgs = formatArgs;
 	exports.save = save;
@@ -30830,7 +30737,7 @@
 
 
 /***/ },
-/* 167 */
+/* 166 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -30846,7 +30753,7 @@
 	exports.disable = disable;
 	exports.enable = enable;
 	exports.enabled = enabled;
-	exports.humanize = __webpack_require__(168);
+	exports.humanize = __webpack_require__(167);
 	
 	/**
 	 * The currently active debug mode names, and names to skip.
@@ -31033,7 +30940,7 @@
 
 
 /***/ },
-/* 168 */
+/* 167 */
 /***/ function(module, exports) {
 
 	/**
@@ -31164,7 +31071,7 @@
 
 
 /***/ },
-/* 169 */
+/* 168 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31173,7 +31080,7 @@
 	var MAGNITUDE_DIGITS = 3; // ditto
 	var SEP = ''; // set to '_' for easier debugging 
 	
-	var utils = __webpack_require__(170);
+	var utils = __webpack_require__(169);
 	
 	exports.collate = function (a, b) {
 	
@@ -31523,7 +31430,7 @@
 
 
 /***/ },
-/* 170 */
+/* 169 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -31598,11 +31505,11 @@
 	};
 
 /***/ },
-/* 171 */
+/* 170 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
-	var immediate = __webpack_require__(172);
+	var immediate = __webpack_require__(171);
 	
 	/* istanbul ignore next */
 	function INTERNAL() {}
@@ -31883,7 +31790,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 172 */
+/* 171 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global, process) {'use strict';
@@ -31963,7 +31870,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(4)))
 
 /***/ },
-/* 173 */
+/* 172 */
 /***/ function(module, exports) {
 
 	// Generated by CoffeeScript 1.9.2
@@ -31991,7 +31898,7 @@
 
 
 /***/ },
-/* 174 */
+/* 173 */
 /***/ function(module, exports, __webpack_require__) {
 
 	(function (factory) {
@@ -32700,7 +32607,7 @@
 
 
 /***/ },
-/* 175 */
+/* 174 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -32879,7 +32786,123 @@
 
 
 /***/ },
+/* 175 */
+/***/ function(module, exports) {
+
+	var dummyData = [
+	  {
+	    "type": "site",
+	    "name": "test site",
+	  },
+	  {
+	    "type": "site",
+	    "name": "another test site"
+	  },
+	  {
+	    "type": "trench",
+	    "name": "test trench"
+	  },
+	  {
+	    "type": "context",
+	    "name": "test context"
+	  },
+	  {
+	    "type": "find",
+	    "name": "test find"
+	  }
+	
+	]
+	
+	module.exports = dummyData;
+
+/***/ },
 /* 176 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var PouchDB = __webpack_require__(159);
+	
+	var Site = __webpack_require__(177);
+	var TrenchBox = __webpack_require__(178);
+	var SiteList = __webpack_require__(184);
+	var SiteForm = __webpack_require__(185);
+	
+	var siteArray = [];
+	
+	var SiteBox = React.createClass({
+	  displayName: 'SiteBox',
+	
+	
+	  componentDidMount: function componentDidMount() {
+	
+	    // NEW APPROACH: INSTEAD OF SEEDING DATA ONLOAD, WHY NOT JUST HAVE A BUTTON? REFACTOR TO REMOVE ALL ATTEMPTS TO SEED DATA ONLOAD
+	
+	    var self = this;
+	    var allDocs = undefined;
+	
+	    this.props.siteDb.allDocs({ include_docs: true, descending: true
+	    }).then(function (result) {
+	      console.log('alldocs result', result, self.props.siteDb);
+	      result.rows.forEach(function (one) {
+	        if (one.doc.type === 'site') {
+	          siteArray.push(one.doc);
+	          console.log('added:', one);
+	        }
+	      });
+	    }).then(function (result) {
+	      console.log('state set');
+	      self.setState({ sites: siteArray });
+	    }).catch(function (err) {
+	      console.log(err);
+	    });
+	  },
+	
+	  handleSiteSubmit: function handleSiteSubmit(site) {
+	    // stuff
+	    console.log('data?', this.state, site);
+	    var date = new Date();
+	    var JSONDate = date.toJSON();
+	
+	    this.props.siteDb.put({
+	      _id: JSONDate,
+	      name: site.name,
+	      type: 'site',
+	      lat: site.lat,
+	      long: site.long
+	    });
+	
+	    var newSites = this.state.sites.concat([site]);
+	
+	    this.setState({ sites: siteArray });
+	  },
+	
+	  getInitialState: function getInitialState() {
+	    return { sites: [] };
+	  },
+	
+	  render: function render() {
+	    console.log('I render', this.state.sites);
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'h1',
+	        null,
+	        'SiteBox'
+	      ),
+	      React.createElement(SiteList, { sites: this.state.sites }),
+	      React.createElement(SiteForm, { onSiteSubmit: this.handleSiteSubmit, siteDb: this.props.siteDb }),
+	      React.createElement(TrenchBox, null)
+	    );
+	  }
+	});
+	
+	module.exports = SiteBox;
+
+/***/ },
+/* 177 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -32894,15 +32917,15 @@
 	module.exports = Site;
 
 /***/ },
-/* 177 */
+/* 178 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var React = __webpack_require__(1);
 	
-	var Trench = __webpack_require__(178);
-	var ContextBox = __webpack_require__(179);
+	var Trench = __webpack_require__(179);
+	var ContextBox = __webpack_require__(180);
 	
 	var TrenchBox = React.createClass({
 	  displayName: 'TrenchBox',
@@ -32924,7 +32947,7 @@
 	module.exports = TrenchBox;
 
 /***/ },
-/* 178 */
+/* 179 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -32950,15 +32973,15 @@
 	module.exports = Trench;
 
 /***/ },
-/* 179 */
+/* 180 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var React = __webpack_require__(1);
 	
-	var Context = __webpack_require__(180);
-	var FindBox = __webpack_require__(181);
+	var Context = __webpack_require__(181);
+	var FindBox = __webpack_require__(182);
 	
 	var ContextBox = React.createClass({
 	  displayName: 'ContextBox',
@@ -32980,7 +33003,7 @@
 	module.exports = ContextBox;
 
 /***/ },
-/* 180 */
+/* 181 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -32998,14 +33021,14 @@
 	module.exports = Context;
 
 /***/ },
-/* 181 */
+/* 182 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var React = __webpack_require__(1);
 	
-	var Find = __webpack_require__(182);
+	var Find = __webpack_require__(183);
 	
 	var FindBox = React.createClass({
 	  displayName: 'FindBox',
@@ -33028,7 +33051,7 @@
 	module.exports = FindBox;
 
 /***/ },
-/* 182 */
+/* 183 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -33040,15 +33063,15 @@
 	module.exports = Find;
 
 /***/ },
-/* 183 */
+/* 184 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var React = __webpack_require__(1);
-	var PouchDB = __webpack_require__(160);
+	var PouchDB = __webpack_require__(159);
 	
-	var Site = __webpack_require__(176);
+	var Site = __webpack_require__(177);
 	
 	var SiteList = React.createClass({
 	  displayName: 'SiteList',
@@ -33082,15 +33105,16 @@
 	module.exports = SiteList;
 
 /***/ },
-/* 184 */
+/* 185 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var React = __webpack_require__(1);
-	var PouchDB = __webpack_require__(160);
+	var PouchDB = __webpack_require__(159);
 	
-	var Site = __webpack_require__(176);
+	var dummyData = __webpack_require__(175);
+	var Site = __webpack_require__(177);
 	
 	var SiteForm = React.createClass({
 	  displayName: 'SiteForm',
@@ -33100,19 +33124,33 @@
 	    return { name: '', type: '', lat: '', long: '' };
 	  },
 	
+	  handleSiteNameChange: function handleSiteNameChange(e) {
+	    this.setState({ name: e.target.value });
+	  },
+	
+	  handleLatitudeChange: function handleLatitudeChange(e) {
+	    this.setState({ lat: e.target.value });
+	  },
+	
+	  handleLongtitudeChange: function handleLongtitudeChange(e) {
+	    this.setState({ long: e.target.value });
+	  },
+	
 	  handleSubmit: function handleSubmit(e) {
-	    console.log('submitting site...', this.props.siteDb);
 	    e.preventDefault();
 	
 	    var name = this.state.name.trim();
 	    var lat = this.state.lat.trim();
 	    var long = this.state.long.trim();
 	
-	    this.setState({ name: name, lat: lat, long: long });
-	    this.props.onSiteSubmit({ name: name, lat: lat, long: long });
+	    this.setState({ name: name, type: 'site', lat: lat, long: long });
+	    this.props.onSiteSubmit({ name: name, type: 'site', lat: lat, long: long });
+	    console.log('submitting site...', this.state);
 	  },
 	
 	  render: function render() {
+	
+	    // SOMEWHERE IN HERE, A BUTTON TO FORCE SEEDING
 	    return React.createElement(
 	      'div',
 	      null,
@@ -33143,36 +33181,6 @@
 	});
 	
 	module.exports = SiteForm;
-
-/***/ },
-/* 185 */
-/***/ function(module, exports) {
-
-	var dummyData = [
-	  {
-	    "type": "site",
-	    "name": "test site",
-	  },
-	  {
-	    "type": "site",
-	    "name": "another test site"
-	  },
-	  {
-	    "type": "trench",
-	    "name": "test trench"
-	  },
-	  {
-	    "type": "context",
-	    "name": "test context"
-	  },
-	  {
-	    "type": "find",
-	    "name": "test find"
-	  }
-	
-	]
-	
-	module.exports = dummyData;
 
 /***/ }
 /******/ ]);

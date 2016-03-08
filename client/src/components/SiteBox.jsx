@@ -7,17 +7,17 @@ var TrenchBox = require('./TrenchBox.jsx');
 var SiteList = require('./SiteList.jsx');
 var SiteForm = require('./SiteForm.jsx');
 
-var dummyData = require('../dummyData.json');
+var siteArray = [];
 
 
 var SiteBox = React.createClass({
+
 
   componentDidMount: function(){
 
     // NEW APPROACH: INSTEAD OF SEEDING DATA ONLOAD, WHY NOT JUST HAVE A BUTTON? REFACTOR TO REMOVE ALL ATTEMPTS TO SEED DATA ONLOAD
 
     var self = this;
-    var siteArray = [];
     var allDocs = undefined;
 
     this.props.siteDb.allDocs({include_docs: true, descending: true
@@ -37,29 +37,24 @@ var SiteBox = React.createClass({
     })
   },
 
-  handleSiteSubmit: function(){
+  handleSiteSubmit: function(site){
     // stuff
-    var self = this;
+    console.log('data?', this.state, site)
     var date = new Date;
     var JSONDate = date.toJSON();
+
     this.props.siteDb.put({
       _id: JSONDate,
-      name: 'test',
+      name: site.name,
       type: 'site',
-      lat: '43',
-      long: '43'
-    }).then(function(response){
-      console.log(response);
-      self.props.siteDb.allDocs({include_docs: true, descending: true}).then(function(result){
-        result.rows.forEach(function(one){
-          if(one.doc.type === 'site'){
-            console.log(one.doc)
-          }
-        });
-      });
-    }).catch(function(err){
-      console.log(err);
-    }.bind(this));
+      lat: site.lat,
+      long: site.long
+    });
+
+    var newSites = this.state.sites.concat( [site] )
+
+    this.setState( { sites: siteArray } )
+
   },
 
   getInitialState: function(){

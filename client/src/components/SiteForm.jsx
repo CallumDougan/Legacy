@@ -2,6 +2,7 @@ var React = require('react');
 var PouchDB = require('pouchdb');
 
 
+var dummyData = require('../dummyData.json');
 var Site = require('../models/site.js');
 
 var SiteForm = React.createClass({
@@ -10,19 +11,34 @@ var SiteForm = React.createClass({
     return{ name: '', type: '', lat: '', long: ''};
   },
 
+  handleSiteNameChange: function(e){
+    this.setState({ name: e.target.value })
+  },
+
+  handleLatitudeChange: function(e){
+    this.setState({ lat: e.target.value })
+  },
+
+  handleLongtitudeChange: function(e){
+    this.setState({ long: e.target.value })
+  },
+
   handleSubmit: function(e){
-    console.log('submitting site...', this.props.siteDb)
     e.preventDefault();
 
     var name = this.state.name.trim();
     var lat = this.state.lat.trim();
     var long = this.state.long.trim();
 
-    this.setState( {name: name, lat: lat, long: long} );
-    this.props.onSiteSubmit( {name: name, lat: lat, long: long} )
+    this.setState( {name: name, type: 'site', lat: lat, long: long} );
+    this.props.onSiteSubmit( {name: name, type: 'site', lat: lat, long: long} )
+    console.log('submitting site...', this.state)
+
   },
 
   render: function(){
+
+    // SOMEWHERE IN HERE, A BUTTON TO FORCE SEEDING
     return(
       <div>
       <form onSubmit={ this.handleSubmit }>
