@@ -8,7 +8,13 @@ var SiteList = React.createClass({
 
   handleClick: function(e){
     e.preventDefault();
-    console.log('clicked a site link');
+    console.log('clicked a site link', e.target.innerText);
+    var siteId = e.target.innerText;
+
+    var site = this.props.findSiteById(siteId);
+    console.log('site', site)
+
+    this.props.openTrenches(site);
   },
 
   render: function(){

@@ -57,9 +57,19 @@
 	  var SiteBox = __webpack_require__(176);
 	
 	  var siteDb = new PouchDB({ name: 'siterecord', auto_compaction: true });
+	  var trenchDb = new PouchDB({ name: 'trenchrecord', auto_compaction: true });
+	
+	  // Seed date setup
+	  console.log('adding test trench...');
+	  trenchDb.put({
+	    _id: 'test',
+	    type: 'trench',
+	    site_id: 'Tgh 671-1112'
+	  });
+	
 	  var remoteCouch = 'http://localhost:5984/siterecord';
 	
-	  ReactDOM.render(React.createElement(SiteBox, { siteDb: siteDb }), document.getElementById('legacyapp'));
+	  ReactDOM.render(React.createElement(SiteBox, { siteDb: siteDb, trenchDb: trenchDb }), document.getElementById('legacyapp'));
 	};
 	
 	//     db.changes({
@@ -32846,9 +32856,72 @@
 	    });
 	
 	    var newSites = siteArray.concat([siteEntry]);
-	    console.log('newSites', newSites);
-	
 	    this.setState({ sites: newSites });
+	  },
+	
+	  findSiteById: function findSiteById(siteId) {
+	    var _iteratorNormalCompletion = true;
+	    var _didIteratorError = false;
+	    var _iteratorError = undefined;
+	
+	    try {
+	      for (var _iterator = this.state.sites[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	        var site = _step.value;
+	
+	        if (site.site_id === siteId) {
+	          return site;
+	        }
+	      }
+	    } catch (err) {
+	      _didIteratorError = true;
+	      _iteratorError = err;
+	    } finally {
+	      try {
+	        if (!_iteratorNormalCompletion && _iterator.return) {
+	          _iterator.return();
+	        }
+	      } finally {
+	        if (_didIteratorError) {
+	          throw _iteratorError;
+	        }
+	      }
+	    }
+	  },
+	
+	  openTrenches: function openTrenches(site) {
+	    var foundTrench = undefined;
+	
+	    console.log('finding trench...');
+	    this.props.trenchDb.allDocs({ include_docs: true, descending: true
+	    }).then(function (result) {
+	      var _iteratorNormalCompletion2 = true;
+	      var _didIteratorError2 = false;
+	      var _iteratorError2 = undefined;
+	
+	      try {
+	        for (var _iterator2 = result.rows[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	          var row = _step2.value;
+	
+	          if (row.doc.site_id === site.site_id) {
+	            console.log('found', row.doc);
+	            foundTrench = row.doc;
+	          }
+	        }
+	      } catch (err) {
+	        _didIteratorError2 = true;
+	        _iteratorError2 = err;
+	      } finally {
+	        try {
+	          if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	            _iterator2.return();
+	          }
+	        } finally {
+	          if (_didIteratorError2) {
+	            throw _iteratorError2;
+	          }
+	        }
+	      }
+	    });
 	  },
 	
 	  getInitialState: function getInitialState() {
@@ -32865,7 +32938,7 @@
 	        null,
 	        'SiteBox'
 	      ),
-	      React.createElement(SiteList, { sites: this.state.sites }),
+	      React.createElement(SiteList, { sites: this.state.sites, findSiteById: this.findSiteById, openTrenches: this.openTrenches }),
 	      React.createElement(SiteForm, { onSiteSubmit: this.handleSiteSubmit, siteDb: this.props.siteDb }),
 	      React.createElement(TrenchBox, null)
 	    );
@@ -33052,7 +33125,13 @@
 	
 	  handleClick: function handleClick(e) {
 	    e.preventDefault();
-	    console.log('clicked a site link');
+	    console.log('clicked a site link', e.target.innerText);
+	    var siteId = e.target.innerText;
+	
+	    var site = this.props.findSiteById(siteId);
+	    console.log('site', site);
+	
+	    this.props.openTrenches(site);
 	  },
 	
 	  render: function render() {
