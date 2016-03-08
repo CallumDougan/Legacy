@@ -15,13 +15,15 @@ var SiteList = React.createClass({
     var self = this;
     var siteNodes = this.props.sites.map(function(site){
       return(
-        <li><a
-        href=""
+        <li
         id={site.id}
-        key={ site.site_id }
+        key={ site.site_id }>
+        <a
+        href=""
         onClick={ self.handleClick }>
-        { site.name }
-        </a></li>
+        { site.site_id }
+        </a>
+        </li>
         )
     });
 

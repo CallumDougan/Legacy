@@ -14,8 +14,6 @@ var SiteBox = React.createClass({
 
 
   componentDidMount: function(){
-
-    // NEW APPROACH: INSTEAD OF SEEDING DATA ONLOAD, WHY NOT JUST HAVE A BUTTON? REFACTOR TO REMOVE ALL ATTEMPTS TO SEED DATA ONLOAD
     var self = this;
 
     this.props.siteDb.allDocs({include_docs: true, descending: true
@@ -36,10 +34,19 @@ var SiteBox = React.createClass({
   },
 
   handleSiteSubmit: function(site){
-    console.log('data?', this.state, site)
+    console.log('data?', site)
     var siteLogic = new Site(site.name, site.lat, site.long)
     var date = new Date;
     var JSONDate = date.toJSON();
+
+    var siteEntry = {
+      _id: JSONDate,
+      site_id: siteLogic.id,
+      name: site.name,
+      type: 'site',
+      lat: site.lat,
+      long: site.long
+    }
 
     this.props.siteDb.put({
       _id: JSONDate,
@@ -50,9 +57,10 @@ var SiteBox = React.createClass({
       long: site.long
     });
 
-    var newSites = siteArray.concat( [site] )
+    var newSites = siteArray.concat( [siteEntry] );
+    console.log('newSites', newSites);
 
-    this.setState( { sites: siteArray } )
+    this.setState( { sites: newSites } );
   },
 
   getInitialState: function(){

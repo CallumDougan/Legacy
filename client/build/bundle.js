@@ -62,40 +62,6 @@
 	  ReactDOM.render(React.createElement(SiteBox, { siteDb: siteDb }), document.getElementById('legacyapp'));
 	};
 	
-	// var dummyData = require('./dummyData.json');
-	// var db = null;
-
-	// (function() {
-
-	//   var PouchDB = require('pouchdb');
-
-	//   'use strict';
-
-	//   var ENTER_KEY = 13;
-	//   db = new PouchDB('siterecord');
-	//   var remoteCouch = 'http://localhost:5984/siterecord';
-
-	//   var date = new Date();
-	//   var JSONDate = date.toJSON();
-
-	//   db.destroy().then(
-	//     db.bulkDocs(dummyData).then(function(result){
-	//       console.log('data loaded: ', result);
-	//     }).catch(function(err){
-	//       console.log(err);
-	//     })
-	//     );
-
-	//   var docArray = [];
-
-	//   db.allDocs({include_docs: true, descending: true}, function(err, doc) {
-	//     console.log('populating seed data')
-	//     doc.rows.forEach(function(one){
-	//       docArray.push(one.doc);
-	//     })
-	//     console.log(doc.rows, docArray)
-	//   })
-
 	//     db.changes({
 	//       since: 'now',
 	//       live: true
@@ -32836,8 +32802,6 @@
 	
 	
 	  componentDidMount: function componentDidMount() {
-	
-	    // NEW APPROACH: INSTEAD OF SEEDING DATA ONLOAD, WHY NOT JUST HAVE A BUTTON? REFACTOR TO REMOVE ALL ATTEMPTS TO SEED DATA ONLOAD
 	    var self = this;
 	
 	    this.props.siteDb.allDocs({ include_docs: true, descending: true
@@ -32858,10 +32822,19 @@
 	  },
 	
 	  handleSiteSubmit: function handleSiteSubmit(site) {
-	    console.log('data?', this.state, site);
+	    console.log('data?', site);
 	    var siteLogic = new Site(site.name, site.lat, site.long);
 	    var date = new Date();
 	    var JSONDate = date.toJSON();
+	
+	    var siteEntry = {
+	      _id: JSONDate,
+	      site_id: siteLogic.id,
+	      name: site.name,
+	      type: 'site',
+	      lat: site.lat,
+	      long: site.long
+	    };
 	
 	    this.props.siteDb.put({
 	      _id: JSONDate,
@@ -32872,9 +32845,10 @@
 	      long: site.long
 	    });
 	
-	    var newSites = siteArray.concat([site]);
+	    var newSites = siteArray.concat([siteEntry]);
+	    console.log('newSites', newSites);
 	
-	    this.setState({ sites: siteArray });
+	    this.setState({ sites: newSites });
 	  },
 	
 	  getInitialState: function getInitialState() {
@@ -33086,15 +33060,15 @@
 	    var siteNodes = this.props.sites.map(function (site) {
 	      return React.createElement(
 	        'li',
-	        null,
+	        {
+	          id: site.id,
+	          key: site.site_id },
 	        React.createElement(
 	          'a',
 	          {
 	            href: '',
-	            id: site.id,
-	            key: site.site_id,
 	            onClick: self.handleClick },
-	          site.name
+	          site.site_id
 	        )
 	      );
 	    });
