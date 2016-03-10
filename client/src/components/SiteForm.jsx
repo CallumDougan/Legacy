@@ -29,9 +29,10 @@ var SiteForm = React.createClass({
     var name = this.state.name.trim();
     var lat = this.state.lat.trim();
     var long = this.state.long.trim();
+    var site = 'site'
 
-    this.setState( {name: name, type: 'site', lat: lat, long: long} );
-    this.props.onSiteSubmit( {name: name, type: 'site', lat: lat, long: long} )
+    this.setState( {name: name, type: site, lat: lat, long: long} );
+    this.props.onSiteSubmit( {name: name, type: site, lat: lat, long: long} )
     console.log('submitting site...', this.state)
 
   },

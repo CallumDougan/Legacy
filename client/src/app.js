@@ -13,13 +13,20 @@ var siteDb = new PouchDB( {name : 'siterecord', auto_compaction : true} );
 var trenchDb = new PouchDB( {name: 'trenchrecord', auto_compaction: true} );
 var syncDom = document.getElementById('sync-wrapper');
 
+siteDb.setMaxListeners(100);
+
+siteDb.changes({
+  since: 'now',
+  live: true
+}).on('change', sync);
+
 
 // Seed date setup
 console.log('adding test trench...');
 trenchDb.put({
   _id: 'test',
   type: 'trench',
-  site_id: 'Tgh 671-1112'
+  site_id: 'Ur 45.32-28.01'
 })
 
 var remoteCouch = 'http://localhost:5984/siterecord';

@@ -60,12 +60,19 @@
 	  var trenchDb = new PouchDB({ name: 'trenchrecord', auto_compaction: true });
 	  var syncDom = document.getElementById('sync-wrapper');
 	
+	  siteDb.setMaxListeners(100);
+	
+	  siteDb.changes({
+	    since: 'now',
+	    live: true
+	  }).on('change', sync);
+	
 	  // Seed date setup
 	  console.log('adding test trench...');
 	  trenchDb.put({
 	    _id: 'test',
 	    type: 'trench',
-	    site_id: 'Tgh 671-1112'
+	    site_id: 'Ur 45.32-28.01'
 	  });
 	
 	  var remoteCouch = 'http://localhost:5984/siterecord';
@@ -32873,6 +32880,7 @@
 	    var newSites = siteArray.concat([siteEntry]);
 	    this.setState({ sites: newSites });
 	    this.props.sync();
+	    this.forceUpdate();
 	  },
 	
 	  findSiteById: function findSiteById(siteId) {
@@ -33225,9 +33233,10 @@
 	    var name = this.state.name.trim();
 	    var lat = this.state.lat.trim();
 	    var long = this.state.long.trim();
+	    var site = 'site';
 	
-	    this.setState({ name: name, type: 'site', lat: lat, long: long });
-	    this.props.onSiteSubmit({ name: name, type: 'site', lat: lat, long: long });
+	    this.setState({ name: name, type: site, lat: lat, long: long });
+	    this.props.onSiteSubmit({ name: name, type: site, lat: lat, long: long });
 	    console.log('submitting site...', this.state);
 	  },
 	

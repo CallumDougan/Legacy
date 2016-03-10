@@ -58,6 +58,7 @@ var SiteBox = React.createClass({
     var newSites = siteArray.concat( [siteEntry] );
     this.setState( { sites: newSites } );
     this.props.sync();
+    this.forceUpdate();
   },
 
   findSiteById: function(siteId){
