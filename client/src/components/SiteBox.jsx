@@ -57,6 +57,7 @@ var SiteBox = React.createClass({
 
     var newSites = siteArray.concat( [siteEntry] );
     this.setState( { sites: newSites } );
+    this.props.sync();
   },
 
   findSiteById: function(siteId){
@@ -94,6 +95,12 @@ var SiteBox = React.createClass({
       <h1>SiteBox</h1>
       <SiteList sites={ this.state.sites } findSiteById={ this.findSiteById } findTrenches={ this.findTrenches }/>
       <SiteForm onSiteSubmit={ this.handleSiteSubmit } siteDb={ this.props.siteDb }/>
+      <form onSubmit={ this.props.sync }>
+      <input
+      type="submit"
+      value="Sync test"
+      />
+      </form>
       <TrenchBox/>
       </div>
       );

@@ -75,8 +75,9 @@
 	  }
 	
 	  function sync() {
+	    console.log('attempting sync');
 	    syncDom.setAttribute('data-sync-state', 'syncing');
-	    var opts = { live: true };
+	    var opts = { live: true, retry: true };
 	    siteDb.replicate.sync(remoteCouch, opts, syncError);
 	  }
 	
@@ -84,7 +85,7 @@
 	    sync();
 	  }
 	
-	  ReactDOM.render(React.createElement(SiteBox, { siteDb: siteDb, trenchDb: trenchDb }), document.getElementById('legacyapp'));
+	  ReactDOM.render(React.createElement(SiteBox, { siteDb: siteDb, trenchDb: trenchDb, sync: sync }), document.getElementById('legacyapp'));
 	};
 	
 	//     db.changes({
@@ -32871,6 +32872,7 @@
 	
 	    var newSites = siteArray.concat([siteEntry]);
 	    this.setState({ sites: newSites });
+	    this.props.sync();
 	  },
 	
 	  findSiteById: function findSiteById(siteId) {
@@ -32955,6 +32957,14 @@
 	      ),
 	      React.createElement(SiteList, { sites: this.state.sites, findSiteById: this.findSiteById, findTrenches: this.findTrenches }),
 	      React.createElement(SiteForm, { onSiteSubmit: this.handleSiteSubmit, siteDb: this.props.siteDb }),
+	      React.createElement(
+	        'form',
+	        { onSubmit: this.props.sync },
+	        React.createElement('input', {
+	          type: 'submit',
+	          value: 'Sync test'
+	        })
+	      ),
 	      React.createElement(TrenchBox, null)
 	    );
 	  }

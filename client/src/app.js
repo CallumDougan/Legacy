@@ -29,8 +29,9 @@ function syncError() {
 }
 
 function sync() {
+  console.log('attempting sync');
   syncDom.setAttribute('data-sync-state', 'syncing');
-  var opts = {live: true};
+  var opts = {live: true, retry: true};
   siteDb.replicate.sync(remoteCouch, opts, syncError);
 }
 
@@ -38,13 +39,11 @@ if(remoteCouch){
   sync();
 }
 
-
-
-
 ReactDOM.render(
-<SiteBox siteDb = { siteDb } trenchDb={ trenchDb }/>,
+<SiteBox siteDb = { siteDb } trenchDb={ trenchDb } sync={ sync }/>,
 document.getElementById('legacyapp')
 )
+
 
 
 }
