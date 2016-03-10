@@ -14,7 +14,7 @@ var SiteList = React.createClass({
     var site = this.props.findSiteById(siteId);
     console.log('site', site)
 
-    this.props.openTrenches(site);
+    this.props.findTrenches(site);
   },
 
   render: function(){

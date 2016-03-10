@@ -9,7 +9,6 @@ var SiteForm = require('./SiteForm.jsx');
 
 var siteArray = [];
 
-
 var SiteBox = React.createClass({
 
 
@@ -18,7 +17,6 @@ var SiteBox = React.createClass({
 
     this.props.siteDb.allDocs({include_docs: true, descending: true
     }).then(function(result){
-      console.log('alldocs result', result, self.props.siteDb);
       result.rows.forEach(function(one){
         if(one.doc.type === 'site'){
           siteArray.push(one.doc);
@@ -29,7 +27,7 @@ var SiteBox = React.createClass({
       console.log('state set');
       self.setState( { sites: siteArray } );
     }).catch(function(err){
-      console.log(err);
+      console.log('error:', err);
     })
   },
 
@@ -69,18 +67,18 @@ var SiteBox = React.createClass({
     }
   },
 
-  openTrenches: function(site){
-    var foundTrench = undefined;
+  findTrenches: function(site){
+    var foundTrenches = [];
 
     console.log('finding trench...');
     this.props.trenchDb.allDocs( { include_docs: true, descending: true
     } ).then(function(result){
       for(var row of result.rows){
         if(row.doc.site_id === site.site_id){
-          console.log('found', row.doc);
-          foundTrench = row.doc;
+          foundTrenches.push(row.doc);
         }
       }
+      console.log('found trenches:', foundTrenches);
     }
     )
   },
@@ -94,7 +92,7 @@ var SiteBox = React.createClass({
     return(
       <div>
       <h1>SiteBox</h1>
-      <SiteList sites={ this.state.sites } findSiteById={ this.findSiteById } openTrenches={ this.openTrenches }/>
+      <SiteList sites={ this.state.sites } findSiteById={ this.findSiteById } findTrenches={ this.findTrenches }/>
       <SiteForm onSiteSubmit={ this.handleSiteSubmit } siteDb={ this.props.siteDb }/>
       <TrenchBox/>
       </div>

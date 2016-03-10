@@ -32816,7 +32816,6 @@
 	
 	    this.props.siteDb.allDocs({ include_docs: true, descending: true
 	    }).then(function (result) {
-	      console.log('alldocs result', result, self.props.siteDb);
 	      result.rows.forEach(function (one) {
 	        if (one.doc.type === 'site') {
 	          siteArray.push(one.doc);
@@ -32827,7 +32826,7 @@
 	      console.log('state set');
 	      self.setState({ sites: siteArray });
 	    }).catch(function (err) {
-	      console.log(err);
+	      console.log('error:', err);
 	    });
 	  },
 	
@@ -32888,8 +32887,8 @@
 	    }
 	  },
 	
-	  openTrenches: function openTrenches(site) {
-	    var foundTrench = undefined;
+	  findTrenches: function findTrenches(site) {
+	    var foundTrenches = [];
 	
 	    console.log('finding trench...');
 	    this.props.trenchDb.allDocs({ include_docs: true, descending: true
@@ -32903,8 +32902,7 @@
 	          var row = _step2.value;
 	
 	          if (row.doc.site_id === site.site_id) {
-	            console.log('found', row.doc);
-	            foundTrench = row.doc;
+	            foundTrenches.push(row.doc);
 	          }
 	        }
 	      } catch (err) {
@@ -32921,6 +32919,8 @@
 	          }
 	        }
 	      }
+	
+	      console.log('found trenches:', foundTrenches);
 	    });
 	  },
 	
@@ -32938,7 +32938,7 @@
 	        null,
 	        'SiteBox'
 	      ),
-	      React.createElement(SiteList, { sites: this.state.sites, findSiteById: this.findSiteById, openTrenches: this.openTrenches }),
+	      React.createElement(SiteList, { sites: this.state.sites, findSiteById: this.findSiteById, findTrenches: this.findTrenches }),
 	      React.createElement(SiteForm, { onSiteSubmit: this.handleSiteSubmit, siteDb: this.props.siteDb }),
 	      React.createElement(TrenchBox, null)
 	    );
@@ -33131,7 +33131,7 @@
 	    var site = this.props.findSiteById(siteId);
 	    console.log('site', site);
 	
-	    this.props.openTrenches(site);
+	    this.props.findTrenches(site);
 	  },
 	
 	  render: function render() {
